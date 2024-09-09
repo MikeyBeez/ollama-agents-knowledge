@@ -1,0 +1,11 @@
+numpy
+ollama
+rich
+spacy
+scikit-learn
+networkx
+pytest
+pytest-cov
+flake8
+black
+mypy
