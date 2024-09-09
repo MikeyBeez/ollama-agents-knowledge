@@ -33,7 +33,6 @@ setup(
         "spacy",
         "scikit-learn",
         "networkx",
-        "sqlite3",  # This is part of Python's standard library, so you don't need to include it
     ],
     extras_require={
         "dev": [
