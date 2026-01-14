@@ -1,5 +1,8 @@
 # src/memory_search/search.py
 
+import numpy as np
+from numpy.linalg import norm
+import ollama
 import json
 from typing import List, Tuple, Dict, Any
 from pathlib import Path
@@ -10,18 +13,10 @@ import os
 sys.path.append(os.path.expanduser('~/ollama-agents-data'))
 from config import DATA_DIR, EMBEDDINGS_DIR, EMBEDDING_MODEL, DEFAULT_MODEL
 
-try:
-    import numpy as np
-    from numpy.linalg import norm
-except ImportError:
-    print("NumPy is not installed. Some functionality may be limited.")
-    np = None
-
-import ollama
-
 from .file_utils import read_json_file, write_json_file, get_json_files_in_directory, increment_json_field
 from .logging_setup import logger
 from .ollama_client import process_prompt
+from .kb_graph import get_related_nodes, get_db_connection
 
 def read_memory(filename: str) -> Dict[str, Any]:
     file_path = DATA_DIR / filename
@@ -75,10 +70,6 @@ def get_embeddings(filename: str) -> List[float]:
         return []
 
 def find_most_similar(needle: List[float], haystack: List[List[float]]) -> List[Tuple[float, int]]:
-    if np is None:
-        logger.error("NumPy is not installed. Cannot perform similarity search.")
-        return []
-
     try:
         needle_norm = norm(needle)
         similarity_scores = [

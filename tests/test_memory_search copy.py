@@ -1,20 +1,12 @@
-# tests/test_memory_search.py
-
 import unittest
 from unittest.mock import patch, MagicMock
-import sys
-import os
-
-# Add the project root to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from src.memory_search.search import search_memories, get_embeddings, find_most_similar
+from src.modules.memory_search import search_memories, get_embeddings, find_most_similar
 
 class TestMemorySearch(unittest.TestCase):
-    @patch('src.memory_search.search.get_json_files_in_directory')
-    @patch('src.memory_search.search.get_embeddings')
-    @patch('src.memory_search.search.ollama.embeddings')
-    @patch('src.memory_search.search.read_memory')
+    @patch('src.modules.memory_search.get_json_files_in_directory')
+    @patch('src.modules.memory_search.get_embeddings')
+    @patch('src.modules.memory_search.ollama.embeddings')
+    @patch('src.modules.memory_search.read_memory')
     def test_search_memories(self, mock_read_memory, mock_ollama_embeddings, mock_get_embeddings, mock_get_json_files):
         mock_get_json_files.return_value = [MagicMock(name='file1.json'), MagicMock(name='file2.json')]
         mock_get_embeddings.side_effect = [[1, 0, 0], [0, 1, 0]]

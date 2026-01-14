@@ -1,4 +1,4 @@
-# tests/test_knowledge_extraction.py
+# src/tests/test_knowledge_extraction.py
 
 import unittest
 from unittest.mock import patch, Mock
@@ -6,17 +6,17 @@ import sys
 import os
 
 # Add the project root to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from src.knowledge_extraction.extractor import extract_knowledge
+from src.modules.knowledge_extraction import extract_knowledge
 
 class TestKnowledgeExtraction(unittest.TestCase):
 
-    @patch('src.knowledge_extraction.extractor.extract_key_concepts')
-    @patch('src.knowledge_extraction.extractor.extract_named_entities')
-    @patch('src.knowledge_extraction.extractor.extract_entities_and_relationships')
-    @patch('src.knowledge_extraction.extractor.analyze_query_topic')
-    @patch('src.knowledge_extraction.extractor.analyze_sentiment')
+    @patch('src.modules.knowledge_extraction.extract_key_concepts')
+    @patch('src.modules.knowledge_extraction.extract_named_entities')
+    @patch('src.modules.knowledge_extraction.extract_entities_and_relationships')
+    @patch('src.modules.knowledge_extraction.analyze_query_topic')
+    @patch('src.modules.knowledge_extraction.analyze_sentiment')
     def test_extract_knowledge_success(self, mock_sentiment, mock_topic, mock_entities_rel, mock_named_entities, mock_key_concepts):
         # Arrange
         test_text = "Apple Inc. was founded by Steve Jobs in California. The company revolutionized the smartphone industry with the iPhone."
@@ -58,7 +58,7 @@ class TestKnowledgeExtraction(unittest.TestCase):
         mock_topic.assert_called_once_with(test_text)
         mock_sentiment.assert_called_once_with(test_text)
 
-    @patch('src.knowledge_extraction.extractor.extract_key_concepts')
+    @patch('src.modules.knowledge_extraction.extract_key_concepts')
     def test_extract_knowledge_partial_failure(self, mock_key_concepts):
         # Arrange
         test_text = "This is a test text."

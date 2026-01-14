@@ -1,4 +1,4 @@
-# src/kb_graph/graph_operations.py
+# src/modules/kb_graph.py
 
 import json
 import hashlib
@@ -7,17 +7,16 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, List, Tuple
 from pathlib import Path
 import logging
-import sys
-import os
-
-# Add the path to ollama-agents-data
-sys.path.append(os.path.expanduser('~/ollama-agents-data'))
-from config import DB_FILE, DATA_DIR
 
 logger = logging.getLogger(__name__)
 
+# Configuration
+DB_DIR = Path('data/edgebase')
+DB_FILE = 'knowledge_edges.db'
+DB_PATH = DB_DIR / DB_FILE
+
 def get_db_connection():
-    return sqlite3.connect(DB_FILE)
+    return sqlite3.connect(DB_PATH)
 
 def create_edge(source_id: str, target_id: str, relationship_type: str, strength: float):
     with get_db_connection() as conn:

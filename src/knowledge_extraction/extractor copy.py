@@ -1,8 +1,11 @@
-# src/knowledge_extraction/extractor.py
-from typing import List, Dict, Any
-import logging
+# /Users/bard/Code/Ollama_Agents/src/modules/knowledge_extraction.py
 
-logger = logging.getLogger(__name__)
+from typing import List, Dict, Any
+from src.modules.logging_setup import logger
+from .knowledge_extraction.named_entity_recognizer import extract_named_entities
+from .knowledge_extraction.entity_relationship_extractor import extract_entities_and_relationships
+from .knowledge_extraction.query_topic_analyzer import analyze_query_topic
+from .knowledge_extraction.text_sentiment_analyzer import analyze_sentiment
 
 def extract_knowledge(text: str) -> Dict[str, Any]:
     """
@@ -42,22 +45,22 @@ def extract_knowledge(text: str) -> Dict[str, Any]:
             "sentiment": {}
         }
 
-def extract_key_concepts(text: str) -> List[str]:
-    # Implement key concept extraction
-    return []
+def extract_key_concepts_wrapper(text: str) -> List[str]:
+    """Wrapper function for extract_key_concepts"""
+    return extract_key_concepts(text)
 
-def extract_named_entities(text: str) -> List[Dict[str, str]]:
-    # Implement named entity extraction
-    return []
+def extract_named_entities_wrapper(text: str) -> List[Dict[str, str]]:
+    """Wrapper function for extract_named_entities"""
+    return extract_named_entities(text)
 
-def extract_entities_and_relationships(text: str) -> Dict[str, List[Dict[str, str]]]:
-    # Implement entity and relationship extraction
-    return {"entities": [], "relationships": []}
+def extract_entities_and_relationships_wrapper(text: str) -> Dict[str, List[Dict[str, str]]]:
+    """Wrapper function for extract_entities_and_relationships"""
+    return extract_entities_and_relationships(text)
 
-def analyze_query_topic(text: str) -> Dict[str, Any]:
-    # Implement query topic analysis
-    return {}
+def analyze_query_topic_wrapper(text: str) -> Dict[str, Any]:
+    """Wrapper function for analyze_query_topic"""
+    return analyze_query_topic(text)
 
-def analyze_sentiment(text: str) -> Dict[str, Any]:
-    # Implement sentiment analysis
-    return {}
+def analyze_sentiment_wrapper(text: str) -> Dict[str, Any]:
+    """Wrapper function for analyze_sentiment"""
+    return analyze_sentiment(text)

@@ -1,17 +1,11 @@
-# tests/test_kb_graph.py
+# src/tests/test_kb_graph.py
 
 import unittest
 import sqlite3
 from datetime import datetime, timedelta
 from unittest.mock import patch, MagicMock
 import logging
-import sys
-import os
-
-# Add the project root to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from src.kb_graph.graph_operations import (
+from src.modules.kb_graph import (
     create_edge, update_knowledge_graph, extract_key_concepts,
     get_related_nodes, analyze_file_pair, compare_content, compare_tags,
     compare_titles, compare_timestamps
@@ -35,7 +29,7 @@ class TestKBGraph(unittest.TestCase):
     def tearDown(self):
         self.conn.close()
 
-    @patch('src.kb_graph.graph_operations.get_db_connection')
+    @patch('src.modules.kb_graph.get_db_connection')
     def test_create_edge(self, mock_get_db_connection):
         mock_get_db_connection.return_value = self.conn
         create_edge("A", "B", "RELATED_TO", 0.8)
@@ -55,7 +49,7 @@ class TestKBGraph(unittest.TestCase):
         self.assertIn("python", concepts)
         self.assertIn("is", concepts)
 
-    @patch('src.kb_graph.graph_operations.get_db_connection')
+    @patch('src.modules.kb_graph.get_db_connection')
     def test_get_related_nodes(self, mock_get_db_connection):
         mock_get_db_connection.return_value = self.conn
         create_edge("A", "B", "RELATED_TO", 0.8)
@@ -65,10 +59,10 @@ class TestKBGraph(unittest.TestCase):
         self.assertIn(("B", "RELATED_TO", 0.8), related)
         self.assertIn(("C", "PART_OF", 0.9), related)
 
-    @patch('src.kb_graph.graph_operations.compare_content')
-    @patch('src.kb_graph.graph_operations.compare_tags')
-    @patch('src.kb_graph.graph_operations.compare_titles')
-    @patch('src.kb_graph.graph_operations.compare_timestamps')
+    @patch('src.modules.kb_graph.compare_content')
+    @patch('src.modules.kb_graph.compare_tags')
+    @patch('src.modules.kb_graph.compare_titles')
+    @patch('src.modules.kb_graph.compare_timestamps')
     def test_analyze_file_pair(self, mock_compare_timestamps, mock_compare_titles, mock_compare_tags, mock_compare_content):
         mock_compare_content.return_value = 0.8
         mock_compare_tags.return_value = 0.6
@@ -130,17 +124,17 @@ class TestKBGraph(unittest.TestCase):
         similarity = compare_titles(title1, title2)
         self.assertGreater(similarity, 0)
 
-    def test_compare_timestamps(self):
-        now = datetime.now().isoformat()
-        one_hour_later = (datetime.now() + timedelta(hours=1)).isoformat()
-        one_day_later = (datetime.now() + timedelta(days=1)).isoformat()
-        one_week_later = (datetime.now() + timedelta(weeks=1)).isoformat()
-        two_weeks_later = (datetime.now() + timedelta(weeks=2)).isoformat()
+def test_compare_timestamps(self):
+    now = datetime.now().isoformat()
+    one_hour_later = (datetime.now() + timedelta(hours=1)).isoformat()
+    one_day_later = (datetime.now() + timedelta(days=1)).isoformat()
+    one_week_later = (datetime.now() + timedelta(weeks=1)).isoformat()
+    two_weeks_later = (datetime.now() + timedelta(weeks=2)).isoformat()
 
-        self.assertEqual(compare_timestamps(now, one_hour_later)[0], "TEMPORALLY_CLOSE")
-        self.assertEqual(compare_timestamps(now, one_day_later)[0], "SAME_DAY")
-        self.assertEqual(compare_timestamps(now, one_week_later)[0], "SAME_WEEK")
-        self.assertIsNone(compare_timestamps(now, two_weeks_later))
+    self.assertEqual(compare_timestamps(now, one_hour_later)[0], "TEMPORALLY_CLOSE")
+    self.assertEqual(compare_timestamps(now, one_day_later)[0], "SAME_DAY")
+    self.assertEqual(compare_timestamps(now, one_week_later)[0], "SAME_WEEK")
+    self.assertIsNone(compare_timestamps(now, two_weeks_later))
 
 if __name__ == '__main__':
     unittest.main()
